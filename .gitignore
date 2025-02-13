@@ -1,7 +1,15 @@
-/27012025.xlsx
+# Ignorar archivos compilados de Python
+*.pyc
+__pycache__/
+# Ignorar archivos de configuración o logs
+*.log
+*.pkl
+# Ignorar archivos específicos del proyecto
 /data.xlsx
-/data_filtrada.xlsx
+/$data_filtrada.xlsx
 /~$data_filtrada.xlsx
+/data_filtrada.xlsx
+/directorio.xlsx
 /venv
 /whatsapp_cookies.pkl
 /whatsapp_message_sender.log
