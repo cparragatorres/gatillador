@@ -5,7 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import time
 import logging
-from urllib.parse import quote
 
 class EnhancedWhatsAppMessageSender:
     def __init__(self):
@@ -38,31 +37,27 @@ class EnhancedWhatsAppMessageSender:
                 return False
         return True
 
-    from utils33 import format_message
-
-    #class EnhancedWhatsAppMessageSender:
-        # ...
     def send_message(self, phone_number, message):
-            """
-            Envía un mensaje usando URL directa con el nuevo formato.
-            """
-            try:
-                url = f"https://web.whatsapp.com/send?phone={phone_number}&text={message}"
-                self.driver.get(url)
-                send_button = self.wait.until(
-                    EC.element_to_be_clickable((By.XPATH, '//span[@data-icon="send"]'))
-                )
-                time.sleep(2)
-                send_button.click()
-                self.wait.until(
-                    EC.presence_of_element_located((By.XPATH, '//span[@data-icon="msg-check"]'))
-                )
-                logging.info(f"Message sent successfully to {phone_number}")
-                return True
-            except Exception as e:
-                logging.error(f"Failed to send message to {phone_number}: {e}")
-                self.failed_numbers.append((phone_number, str(e)))
-                return False   
+     """Envía un mensaje individual usando URL directa."""
+     try:
+         url = f"https://web.whatsapp.com/send?phone={phone_number}&text={message}"
+         self.driver.get(url)
+         send_button = self.wait.until(
+             EC.element_to_be_clickable((By.XPATH, '//span[@data-icon="send"]'))
+         )
+         time.sleep(3)  # Aumenta el tiempo de espera
+         send_button.click()
+
+         # Asegúrate de esperar hasta que el mensaje se haya enviado
+         self.wait.until(
+             EC.presence_of_element_located((By.XPATH, '//span[@data-icon="msg-check"]'))
+         )
+         logging.info(f"Message sent successfully to {phone_number}")
+         return True
+     except Exception as e:
+         logging.error(f"Failed to send message to {phone_number}: {e}")
+         self.failed_numbers.append((phone_number, str(e)))
+         return False
 
 
     def send_batch_messages(self, phone_numbers, messages):
