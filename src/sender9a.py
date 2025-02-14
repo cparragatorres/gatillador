@@ -5,11 +5,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import time
 import logging
+import os
 
 class EnhancedWhatsAppMessageSender:
     def __init__(self):
+         # Definir una única carpeta para el perfil de Chrome
+        base_dir = os.path.abspath(os.path.dirname(__file__))  # Ruta base del proyecto
+        self.user_data_dir = os.path.join(base_dir, "chrome-data")  # Carpeta única
+        
         # Configuración del navegador
         chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument(f"--user-data-dir={self.user_data_dir}")
         chrome_options.add_argument('--disable-notifications')
         chrome_options.add_argument('--start-maximized')
         chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])

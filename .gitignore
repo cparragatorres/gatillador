@@ -13,16 +13,7 @@ __pycache__/
 /venv
 /whatsapp_cookies.pkl
 /whatsapp_message_sender.log
-chrome-data/First Run
-chrome-data/Local State
-chrome-data/Default/Preferences
+chrome-data/
 PyWhatKit_DB.txt
-chrome-data-KBOxkT7k/First Run
-chrome-data-KBOxkT7k/Local State
-chrome-data-KBOxkT7k/Default/Preferences
-chrome-data-vWSDiHk6/First Run
-chrome-data-vWSDiHk6/Local State
-chrome-data-vWSDiHk6/Default/Preferences
-chrome-data-Z5eT7Vzh/First Run
-chrome-data-Z5eT7Vzh/Local State
-chrome-data-Z5eT7Vzh/Default/Preferences
+chrome-data/
+chrome-data-*
