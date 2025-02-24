@@ -13,6 +13,11 @@ data.xlsx
 data_filtrada.xlsx
 /directorio.xlsx
 directorio.xlsx
+horarios_filtrados.xlsx
+~$horarios_filtrados.xlsx
+horarios.xlsx
+~$horarios.xlsx
+
 /venv
 /whatsapp_cookies.pkl
 /whatsapp_message_sender.log
