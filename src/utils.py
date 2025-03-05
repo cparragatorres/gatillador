@@ -1,6 +1,8 @@
 import logging
 import re
 import html
+import pandas as pd
+import unicodedata
 
 def configurar_logs(log_file="logs/whatsapp_message_sender.log", log_to_console=False):
     """
@@ -57,3 +59,42 @@ def formatear_mensaje(encabezado, cuerpo, pie=None):
         mensaje_formateado += html.unescape(pie)
 
     return mensaje_formateado
+
+def cargar_excel(ruta):
+    """
+    Carga un archivo Excel con pandas y maneja errores de manera eficiente.
+
+    Args:
+        ruta (str): Ruta del archivo Excel.
+
+    Returns:
+        pd.DataFrame: DataFrame con los datos si se carga correctamente, None si hay error.
+    """
+    try:
+        df = pd.read_excel(ruta, dtype=str)
+        print(f"Datos cargados exitosamente: {ruta}")
+        return df
+    except FileNotFoundError:
+        print(f"Archivo no encontrado: {ruta}")
+    except Exception as e:
+        print(f"Error al leer el archivo {ruta}: {str(e)}")
+    return None
+
+
+
+def normalizar_nombres_columnas(df):
+    """
+    Normaliza los nombres de las columnas:
+    - Convierte a minúsculas.
+    - Elimina espacios al inicio y al final.
+    - Reemplaza tildes por letras sin acento.
+    - Reemplaza caracteres especiales por un guion bajo.
+    """
+    def limpiar(texto):
+        texto = texto.strip().lower()  # Convertir a minúsculas y quitar espacios
+        texto = unicodedata.normalize('NFKD', texto).encode('ASCII', 'ignore').decode('utf-8')  # Quitar tildes
+        texto = re.sub(r'[^a-z0-9_]', '_', texto)  # Reemplazar caracteres especiales por "_"
+        return texto
+
+    df.columns = [limpiar(col) for col in df.columns]
+    return df
