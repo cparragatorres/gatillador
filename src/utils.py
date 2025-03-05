@@ -2,7 +2,7 @@ import logging
 import re
 import html
 
-def setup_logging(log_file="whatsapp_message_sender.log", log_to_console=False):
+def configurar_logs(log_file="logs/whatsapp_message_sender.log", log_to_console=False):
     """
     Configura el sistema de logging para registrar en un archivo y opcionalmente en consola.
 
@@ -13,49 +13,47 @@ def setup_logging(log_file="whatsapp_message_sender.log", log_to_console=False):
     handlers = [logging.FileHandler(log_file)]
     if log_to_console:
         handlers.append(logging.StreamHandler())
-    
+
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
         handlers=handlers
     )
-    logging.info("Logging setup completed.")
+    logging.info("Sistema de logs configurado correctamente.")
 
-def validate_phone_number(phone_number):
+def validar_numero(numero):
     """
     Valida que el número de teléfono esté en formato internacional (+countrycode).
 
     Args:
-        phone_number (str): Número de teléfono a validar.
+        numero (str): Número de teléfono a validar.
 
     Returns:
         bool: True si el número es válido, False de lo contrario.
     """
-    pattern = r'^\+\d{1,15}$'
-    if not re.match(pattern, phone_number):
-        logging.warning(f"Invalid phone number format: {phone_number}. Expected format: +1234567890.")
+    patron = r'^\+\d{1,15}$'
+    if not re.match(patron, numero):
+        logging.warning(f"Número inválido: {numero}. Formato esperado: +1234567890.")
         return False
-    logging.info(f"Valid phone number: {phone_number}")
+    logging.info(f"Número válido: {numero}")
     return True
 
-def format_message(header, body, footer=None):
+def formatear_mensaje(encabezado, cuerpo, pie=None):
     """
-    Formatea un mensaje en el estilo deseado.
+    Formatea un mensaje con saltos de línea adecuados para WhatsApp.
 
     Args:
-        header (str): Encabezado del mensaje.
-        body (str): Cuerpo principal del mensaje.
-        recommendations (list): Lista de recomendaciones.
-        footer (str): Pie de página del mensaje.
+        encabezado (str): Encabezado del mensaje.
+        cuerpo (str): Cuerpo principal del mensaje.
+        pie (str, opcional): Pie de página del mensaje.
 
     Returns:
         str: Mensaje formateado con saltos de línea codificados.
     """
-    formatted_message = html.unescape(header + "%0A%0A")
-    formatted_message += html.unescape(body + "%0A%0A")
+    mensaje_formateado = html.unescape(encabezado + "%0A%0A")
+    mensaje_formateado += html.unescape(cuerpo + "%0A%0A")
 
+    if pie:
+        mensaje_formateado += html.unescape(pie)
 
-    if footer:
-        formatted_message += html.unescape(footer)
-
-    return formatted_message
+    return mensaje_formateado
