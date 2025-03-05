@@ -7,6 +7,7 @@ __pycache__/
 # Ignorar archivos específicos del proyecto
 /data.xlsx
 data.xlsx
+data_procesada/
 /$data_filtrada.xlsx
 /~$data_filtrada.xlsx
 /data_filtrada.xlsx
