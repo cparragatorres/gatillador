@@ -98,3 +98,57 @@ def normalizar_nombres_columnas(df):
 
     df.columns = [limpiar(col) for col in df.columns]
     return df
+
+from datetime import datetime
+from src.utils import formatear_mensaje
+
+def generar_mensaje_alerta(telefono, estado, estacion, ultima_fecha, hora_inferior, hora_superior, nivel_cloro, localidad=None, departamento=None):
+    """
+    Genera el mensaje de alerta según el estado y la hora de corte.
+
+    Args:
+        telefono (str): Número de teléfono al que se enviará el mensaje.
+        estado (str): Estado de la estación (inadecuado, inactivo, etc.).
+        estacion (str): Nombre de la estación.
+        ultima_fecha (str): Fecha del último registro.
+        hora_inferior (str): Hora de inicio del monitoreo.
+        hora_superior (str): Hora de fin del monitoreo.
+        nivel_cloro (str): Nivel de cloro detectado.
+        localidad (str, opcional): Localidad de la estación.
+        departamento (str, opcional): Departamento de la estación.
+
+    Returns:
+        str: Mensaje formateado listo para ser enviado por WhatsApp.
+    """
+
+    # Si no se proporciona una fecha, usar la actual
+    if not ultima_fecha:
+        ultima_fecha = datetime.now().strftime("%d/%m/%Y")
+
+    # Ubicación opcional en el mensaje
+    ubicacion = f" ubicada en {localidad} - {departamento}," if localidad and departamento else ""
+
+    # Generar mensaje según el estado
+    if estado == "inadecuado":
+        header = "🚨¡ALERTA: NIVEL BAJO DE CLORO!🚨"
+        body = (
+            f"Hoy, {ultima_fecha} se ha detectado un nivel de cloro promedio de {nivel_cloro} "
+            f"indicando que está por debajo del mínimo requerido (0.5 mg/L) en la estación {estacion}{ubicacion} "
+            f"entre las {hora_inferior} y {hora_superior} horas.\n\n"
+            "⚠️ Importante: Es necesario corregir el nivel de cloro para garantizar que el agua sea segura para el consumo."
+        )
+        footer = "✅ Acción inmediata: Realizar el proceso de clorificación ahora, responder las acciones que tomarán y reportar por este medio cuando se esté corregido."
+
+    elif estado == "inactivo":
+        header = "🚨¡ALERTA: INACTIVIDAD DE ESTACIÓN! 🚨"
+        body = (
+            f"Hoy, {ultima_fecha} la estación {estacion}{ubicacion} se detectó inactiva "
+            f"entre las {hora_inferior} y {hora_superior} horas, estando fuera de su horario de operación programada.\n\n"
+            "⚠️ Importante: Es necesario activar la estación y cuidar del nivel de cloro para garantizar que el agua sea segura para el consumo."
+        )
+        footer = "✅ Acción inmediata: Realizar la activación de la estación e indicar el nivel de cloro y reportar por este medio cuando se esté corregido."
+
+    else:
+        return None  # Si el estado no es relevante, no genera mensaje
+
+    return formatear_mensaje(header, body, footer)
