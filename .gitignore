@@ -18,6 +18,9 @@ horarios_filtrados.xlsx
 ~$horarios_filtrados.xlsx
 horarios.xlsx
 ~$horarios.xlsx
+directorio_camis.xlsx
+~$directorio_camis.xlsx
+proyecto_camis.ipynb
 
 /venv
 /whatsapp_cookies.pkl
